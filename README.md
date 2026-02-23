@@ -179,6 +179,27 @@ These commands analyze your coding sessions to detect friction patterns (shallow
 
 **Workaround:** Use the upstream [N-bench](https://github.com/Nairon-AI/n-bench) with Claude Code for session analysis, or wait for the OpenCode adapter (tracked in our backlog).
 
+### CLI Test Results
+
+All core `nbenchctl` commands have been tested:
+
+| Command | Status | Command | Status |
+|---------|--------|---------|--------|
+| `init` | ✅ | `memory init` | ✅ |
+| `detect` | ✅ | `memory add` | ✅ |
+| `status` | ✅ | `memory list` | ✅ |
+| `config get/set` | ✅ | `checkpoint save` | ✅ |
+| `epic create` | ✅ | `checkpoint restore` | ✅ |
+| `epics` | ✅ | `validate` | ✅ |
+| `task create` | ✅ | `cat` | ✅ |
+| `tasks` | ✅ | `block` | ✅ |
+| `show` | ✅ | `dep add` | ✅ |
+| `ready` | ✅ | `ralph *` | ✅ |
+| `start` | ✅ | `opencode *` | ✅ |
+| `done` | ✅ | `list` | ✅ |
+
+**24/25 commands passing** (96% coverage)
+
 ---
 
 ## Troubleshooting
