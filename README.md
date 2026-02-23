@@ -153,6 +153,34 @@ The canonical Claude Code plugin has more features and faster updates. Use this 
 
 ---
 
+## Known Limitations
+
+This is an experimental port. Some features don't work yet:
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| `/nbench:plan` | ✅ Works | Full planning workflow |
+| `/nbench:work` | ✅ Works | Task execution with re-anchoring |
+| `/nbench:interview` | ✅ Works | Requirements gathering |
+| `/nbench:sync` | ✅ Works | Spec synchronization |
+| `/nbench:impl-review` | ✅ Works | Implementation review |
+| `/nbench:plan-review` | ✅ Works | Plan review |
+| `/nbench:epic-review` | ✅ Works | Epic completion review |
+| `/nbench:prime` | ✅ Works | Codebase assessment |
+| `/nbench:improve` | ❌ Not yet | Requires OpenCode session adapter |
+| `/nbench:score` | ❌ Not yet | Requires OpenCode session adapter |
+| `/nbench:profile` | ⚠️ Partial | Skills detection needs adaptation |
+
+### Why `/nbench:improve` and `/nbench:score` don't work
+
+These commands analyze your coding sessions to detect friction patterns (shallow prompts, blind acceptance, etc.) and recommend improvements.
+
+**The problem:** Claude Code stores sessions as JSONL files in `~/.claude/projects/`. OpenCode uses SQLite in `~/.local/share/opencode/`. The session parsing scripts need an adapter for OpenCode's format.
+
+**Workaround:** Use the upstream [N-bench](https://github.com/Nairon-AI/n-bench) with Claude Code for session analysis, or wait for the OpenCode adapter (tracked in our backlog).
+
+---
+
 ## Troubleshooting
 
 **"No .nbench/ found"**
