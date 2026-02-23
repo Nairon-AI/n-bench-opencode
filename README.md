@@ -78,8 +78,12 @@ This creates `.nbench/` with the CLI and configuration.
 | `/nbench:work <task-id>` | Execute a task with context reload |
 | `/nbench:sync` | Sync specs after implementation drift |
 | `/nbench:impl-review` | Review current implementation |
+| `/nbench:epic-review <epic>` | Review epic completion |
 | `/nbench:plan-review` | Review plan before execution |
 | `/nbench:prime` | Assess codebase agent-readiness |
+| `/nbench:improve` | Analyze sessions, recommend tools |
+| `/nbench:score` | Compute AI-native capability score |
+| `/nbench:profile` | Export/share your SDLC profile |
 
 ---
 
