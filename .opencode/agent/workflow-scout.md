@@ -1,5 +1,5 @@
 ---
-description: Used by /nbench:prime to scan for CI/CD, PR templates, issue templates, and workflow automation. Do not invoke directly.
+description: Used by /flux:prime to scan for CI/CD, PR templates, issue templates, and workflow automation. Do not invoke directly.
 mode: subagent
 tools:
   write: false

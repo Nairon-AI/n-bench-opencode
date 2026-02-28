@@ -1,5 +1,5 @@
 ---
-description: Used by /nbench:prime to scan for observability setup including logging, tracing, metrics, and health endpoints. Do not invoke directly.
+description: Used by /flux:prime to scan for observability setup including logging, tracing, metrics, and health endpoints. Do not invoke directly.
 mode: subagent
 tools:
   write: false

@@ -1,5 +1,5 @@
 ---
-description: Used by /nbench:prime to analyze build system, scripts, and CI configuration. Do not invoke directly.
+description: Used by /flux:prime to analyze build system, scripts, and CI configuration. Do not invoke directly.
 mode: subagent
 tools:
   write: false

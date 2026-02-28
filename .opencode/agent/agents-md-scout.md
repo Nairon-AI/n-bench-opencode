@@ -1,5 +1,5 @@
 ---
-description: Used by /nbench:prime to analyze CLAUDE.md and AGENTS.md quality and completeness. Do not invoke directly.
+description: Used by /flux:prime to analyze CLAUDE.md and AGENTS.md quality and completeness. Do not invoke directly.
 mode: subagent
 tools:
   write: false

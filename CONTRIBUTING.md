@@ -1,4 +1,4 @@
-# Contributing to N-bench for OpenCode
+# Contributing to Flux for OpenCode
 
 Thanks for your interest in contributing!
 
@@ -24,4 +24,4 @@ Thanks for your interest in contributing!
 ## Questions?
 
 - [Discord](https://discord.gg/CEQMd6fmXk)
-- [Issues](https://github.com/Nairon-AI/n-bench-opencode/issues)
+- [Issues](https://github.com/Nairon-AI/flux-opencode/issues)

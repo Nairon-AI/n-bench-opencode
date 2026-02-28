@@ -1,5 +1,5 @@
 ---
-description: Used by /nbench:prime to scan for environment setup, .env templates, Docker, and devcontainer configuration. Do not invoke directly.
+description: Used by /flux:prime to scan for environment setup, .env templates, Docker, and devcontainer configuration. Do not invoke directly.
 mode: subagent
 tools:
   write: false

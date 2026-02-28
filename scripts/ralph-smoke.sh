@@ -6,7 +6,7 @@ usage() {
 Usage: scripts/ralph-smoke.sh [--dir PATH] [--no-task]
 
 Creates a clean Ralph fixture repo for smoke testing.
-Defaults to /tmp/nbench-opencode-smoke (must not already exist).
+Defaults to /tmp/flux-opencode-smoke (must not already exist).
 
 Options:
   --dir PATH   Target directory (must not exist)
@@ -15,7 +15,7 @@ EOF
 }
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-OUTDIR="/tmp/nbench-opencode-smoke"
+OUTDIR="/tmp/flux-opencode-smoke"
 CREATE_TASK=1
 
 while [[ $# -gt 0 ]]; do
@@ -74,24 +74,24 @@ git -C "$OUTDIR" checkout -B main >/dev/null
   cd "$OUTDIR"
   ./install.sh --project "$PWD" >/dev/null
   mkdir -p scripts/ralph/runs
-  cp -R .opencode/skill/nbench-opencode-ralph-init/templates/. scripts/ralph/
-  cp .opencode/bin/nbenchctl .opencode/bin/nbenchctl.py scripts/ralph/
-  chmod +x scripts/ralph/ralph.sh scripts/ralph/ralph_once.sh scripts/ralph/nbenchctl
+  cp -R .opencode/skill/flux-opencode-ralph-init/templates/. scripts/ralph/
+  cp .opencode/bin/fluxctl .opencode/bin/fluxctl.py scripts/ralph/
+  chmod +x scripts/ralph/ralph.sh scripts/ralph/ralph_once.sh scripts/ralph/fluxctl
   sed -i '' -e 's/{{PLAN_REVIEW}}/opencode/' -e 's/{{WORK_REVIEW}}/opencode/' scripts/ralph/config.env
   git add scripts/ralph
   git commit -m "chore: add ralph fixture" >/dev/null
 
   if [[ "$CREATE_TASK" == "1" ]]; then
-    ./scripts/ralph/nbenchctl init >/dev/null
-    ACCEPT="$(mktemp /tmp/nbench-opencode-acceptance.XXXXXX)"
+    ./scripts/ralph/fluxctl init >/dev/null
+    ACCEPT="$(mktemp /tmp/flux-opencode-acceptance.XXXXXX)"
     cat > "$ACCEPT" <<'EOF'
 - [ ] Create `docs/smoke-task.md` with a single line: `smoke ok`
 - [ ] Run `git status --porcelain=v1`
 - [ ] Run `git show --stat`
 EOF
-    EPIC_ID="$(./scripts/ralph/nbenchctl epic create --title "Smoke Epic" --json | jq -r '.id')"
-    TASK_ID="$(./scripts/ralph/nbenchctl task create --epic "$EPIC_ID" --title "Smoke Task" --acceptance-file "$ACCEPT" --json | jq -r '.id')"
-    TASK_PATH=".nbench/tasks/$TASK_ID.md"
+    EPIC_ID="$(./scripts/ralph/fluxctl epic create --title "Smoke Epic" --json | jq -r '.id')"
+    TASK_ID="$(./scripts/ralph/fluxctl task create --epic "$EPIC_ID" --title "Smoke Task" --acceptance-file "$ACCEPT" --json | jq -r '.id')"
+    TASK_PATH=".flux/tasks/$TASK_ID.md"
     "$PYTHON_BIN" - "$TASK_PATH" <<'PY'
 import sys
 path = sys.argv[1]

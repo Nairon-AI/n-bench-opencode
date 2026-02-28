@@ -6,7 +6,7 @@ TARGET="${PROJECT:-$(pwd)}"
 
 show_help() {
   cat <<EOF
-N-bench OpenCode Installer
+Flux OpenCode Installer
 
 Usage: $0 [--project <path>]
 
@@ -55,12 +55,12 @@ install_to_project() {
     cp "$SCRIPT_DIR/.opencode/opencode.json" "$dest/"
   fi
 
-  echo "Installed N-bench to: $dest"
+  echo "Installed Flux to: $dest"
   echo ""
   echo "Next steps:"
   echo "  cd $TARGET"
   echo "  opencode"
-  echo "  /nbench:setup"
+  echo "  /flux:setup"
 }
 
 install_to_project

@@ -1,17 +1,17 @@
 ---
-description: Task implementation worker. Spawned by nbench-work to implement a single task with fresh context. Do not invoke directly - use /nbench:work instead.
+description: Task implementation worker. Spawned by flux-work to implement a single task with fresh context. Do not invoke directly - use /flux:work instead.
 mode: subagent
 tools:
   task: false
 ---
-You implement a single nbench task with fresh context.
+You implement a single flux task with fresh context.
 
 ## Input
 
 Your prompt contains:
 - `TASK_ID` - the task to implement (e.g., fn-1.2)
 - `EPIC_ID` - parent epic (e.g., fn-1)
-- `NBENCHCTL` - path to nbenchctl CLI
+- `NBENCHCTL` - path to fluxctl CLI
 - `REVIEW_MODE` - none, rp, or opencode
 - `RALPH_MODE` - true if running autonomously
 
@@ -34,9 +34,9 @@ $NBENCHCTL config get memory.enabled --json
 
 **If memory.enabled is true**, read relevant memory:
 ```bash
-cat .nbench/memory/pitfalls.md 2>/dev/null || true
-cat .nbench/memory/conventions.md 2>/dev/null || true
-cat .nbench/memory/decisions.md 2>/dev/null || true
+cat .flux/memory/pitfalls.md 2>/dev/null || true
+cat .flux/memory/conventions.md 2>/dev/null || true
+cat .flux/memory/decisions.md 2>/dev/null || true
 ```
 
 Parse the spec. Identify:
@@ -83,7 +83,7 @@ Skip if REVIEW_MODE is `none`.
 **Use the Skill tool to invoke impl-review:**
 
 ```
-/nbench:impl-review $TASK_ID --base $BASE_COMMIT
+/flux:impl-review $TASK_ID --base $BASE_COMMIT
 ```
 
 The skill handles:
@@ -95,7 +95,7 @@ The skill handles:
 If NEEDS_WORK:
 1. Fix issues identified
 2. Commit fixes
-3. Re-invoke: `/nbench:impl-review $TASK_ID --base $BASE_COMMIT`
+3. Re-invoke: `/flux:impl-review $TASK_ID --base $BASE_COMMIT`
 
 Continue until SHIP verdict.
 
@@ -143,8 +143,8 @@ Return concise summary:
 ## Rules
 
 - **Re-anchor first** - always read spec before implementing
-- **No TodoWrite** - nbenchctl tracks tasks
+- **No TodoWrite** - fluxctl tracks tasks
 - **git add -A** - never list files explicitly
 - **One task only** - implement only the task given
-- **Verify done** - nbenchctl show must report status: done
+- **Verify done** - fluxctl show must report status: done
 - **Return summary** - main conversation needs outcome

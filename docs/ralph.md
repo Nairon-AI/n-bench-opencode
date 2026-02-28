@@ -1,6 +1,6 @@
 # Ralph (Autonomous Loop)
 
-Ralph is N-bench's repo-local autonomous harness. It loops over tasks, applies multi-model review gates, and produces production-quality code overnight.
+Ralph is Flux's repo-local autonomous harness. It loops over tasks, applies multi-model review gates, and produces production-quality code overnight.
 
 ---
 
@@ -8,7 +8,7 @@ Ralph is N-bench's repo-local autonomous harness. It loops over tasks, applies m
 
 - [Quick Start](#quick-start) — Setup, configure, run
 - [How It Works](#how-it-works) — Loop architecture
-- [Why Ralph vs ralph-wiggum](#why-nbench-ralph-vs-anthropics-ralph-wiggum)
+- [Why Ralph vs ralph-wiggum](#why-flux-ralph-vs-anthropics-ralph-wiggum)
 - [Quality Gates](#quality-gates) — Reviews, receipts, memory
 - [Configuration](#configuration) — All config.env options
 - [Run Artifacts](#run-artifacts) — Logs, receipts, blocks
@@ -28,13 +28,13 @@ Ralph is N-bench's repo-local autonomous harness. It loops over tasks, applies m
 Run the init skill from OpenCode:
 
 ```bash
-/nbench:ralph-init
+/flux:ralph-init
 ```
 
 Or run setup from terminal without entering OpenCode:
 
 ```bash
-opencode run "/nbench:ralph-init"
+opencode run "/flux:ralph-init"
 ```
 
 This scaffolds `scripts/ralph/` with:
@@ -80,17 +80,17 @@ scripts/ralph/ralph.sh --watch verbose   # Also stream model responses
 
 ```bash
 # Install TUI (requires Bun)
-bun add -g @Nairon-AI/nbench-tui
+bun add -g @Nairon-AI/flux-tui
 
 # Start TUI (auto-selects latest run)
-nbench-tui
+flux-tui
 ```
 
 Real-time visibility into task progress, streaming logs, and run state.
 
-![nbench-tui](../../../assets/tui.png)
+![flux-tui](../../../assets/tui.png)
 
-See [nbench-tui README](../../../nbench-tui/README.md).
+See [flux-tui README](../../../flux-tui/README.md).
 
 ### Step 3: Uninstall
 
@@ -108,8 +108,8 @@ Ralph wraps OpenCode in a shell loop with quality gates:
 ┌─────────────────────────────────────────────────────────┐
 │  scripts/ralph/ralph.sh                                 │
 │  ┌──────────────────────────────────────────────────┐   │
-│  │ while nbenchctl next returns work:                 │   │
-│  │   1. opencode run "/nbench:plan" or :work     │   │
+│  │ while fluxctl next returns work:                 │   │
+│  │   1. opencode run "/flux:plan" or :work     │   │
 │  │   2. check review receipts                       │   │
 │  │   3. if missing/invalid → retry                  │   │
 │  │   4. if SHIP verdict → next task                 │   │
@@ -119,11 +119,11 @@ Ralph wraps OpenCode in a shell loop with quality gates:
 
 ```mermaid
 flowchart TD
-  A[ralph.sh loop] --> B[nbenchctl next]
-  B -->|plan needed| C[/nbench:plan/]
-  C --> D[/nbench:plan-review/]
-  B -->|work needed| E[/nbench:work/]
-  E --> F[/nbench:impl-review/]
+  A[ralph.sh loop] --> B[fluxctl next]
+  B -->|plan needed| C[/flux:plan/]
+  C --> D[/flux:plan-review/]
+  B -->|work needed| E[/flux:work/]
+  E --> F[/flux:impl-review/]
   D --> G{Receipt valid?}
   F --> G
   G -- yes --> H{Verdict = SHIP?}
@@ -136,11 +136,11 @@ flowchart TD
 
 ---
 
-## Why N-bench Ralph vs Anthropic's ralph-wiggum?
+## Why Flux Ralph vs Anthropic's ralph-wiggum?
 
-Anthropic's official ralph-wiggum plugin uses a Stop hook to keep the model in the same session. N-bench inverts this architecture for production-grade reliability.
+Anthropic's official ralph-wiggum plugin uses a Stop hook to keep the model in the same session. Flux inverts this architecture for production-grade reliability.
 
-| Aspect | ralph-wiggum | N-bench Ralph |
+| Aspect | ralph-wiggum | Flux Ralph |
 |--------|--------------|-----------------|
 | **Session model** | Single session, accumulating context | Fresh context per iteration |
 | **Loop mechanism** | Stop hook re-feeds prompt in SAME session | External bash loop, new `opencode run` each iteration |
@@ -149,7 +149,7 @@ Anthropic's official ralph-wiggum plugin uses a Stop hook to keep the model in t
 | **Re-anchoring** | None | Re-reads epic/task spec EVERY iteration |
 | **Quality gates** | None (test-based only) | Multi-model reviews block until SHIP |
 | **Stuck detection** | `--max-iterations` safety limit | Auto-blocks task after N failures |
-| **State storage** | In-memory transcript | File I/O (`.nbench/`, receipts, evidence) |
+| **State storage** | In-memory transcript | File I/O (`.flux/`, receipts, evidence) |
 | **Auditability** | Session transcript | Per-iteration logs + receipts + evidence |
 
 **The Core Problem with ralph-wiggum**
@@ -159,7 +159,7 @@ Anthropic's official ralph-wiggum plugin uses a Stop hook to keep the model in t
 3. **Single model** - No external validation; the model grades its own homework
 4. **Binary outcome** - Either completion promise triggers, or you hit max iterations
 
-**N-bench's Solution**
+**Flux's Solution**
 
 Fresh context every iteration + multi-model review gates + receipt-based proof-of-work.
 
@@ -221,11 +221,11 @@ Reviews MUST return XML verdict tags:
 
 ### 4. Memory Capture (Opt-in)
 
-When memory is enabled (`nbenchctl config set memory.enabled true`), NEEDS_WORK reviews auto-capture learnings to `.nbench/memory/pitfalls.md`.
+When memory is enabled (`fluxctl config set memory.enabled true`), NEEDS_WORK reviews auto-capture learnings to `.flux/memory/pitfalls.md`.
 
 This builds a project-specific knowledge base of things reviewers catch that models tend to miss.
 
-**Note**: Memory config lives in `.nbench/config.json`, separate from Ralph's `scripts/ralph/config.env`. Memory is a nbench feature that works in both manual and Ralph modes.
+**Note**: Memory config lives in `.flux/config.json`, separate from Ralph's `scripts/ralph/config.env`. Memory is a flux feature that works in both manual and Ralph modes.
 
 ---
 
@@ -313,12 +313,12 @@ scripts/ralph/runs/<run-id>/
 
 ## RepoPrompt Integration
 
-When `PLAN_REVIEW=rp` or `WORK_REVIEW=rp`, Ralph uses `nbenchctl rp` wrappers:
+When `PLAN_REVIEW=rp` or `WORK_REVIEW=rp`, Ralph uses `fluxctl rp` wrappers:
 
 ```bash
-nbenchctl rp pick-window --repo-root .  # Find window by repo
-nbenchctl rp builder ...                 # Build context
-nbenchctl rp chat-send ...               # Send to reviewer
+fluxctl rp pick-window --repo-root .  # Find window by repo
+fluxctl rp builder ...                 # Build context
+fluxctl rp chat-send ...               # Send to reviewer
 ```
 
 Never call `rp-cli` directly in Ralph mode.
@@ -329,11 +329,11 @@ Never call `rp-cli` directly in Ralph mode.
 
 ## OpenCode Integration
 
-When `PLAN_REVIEW=opencode` or `WORK_REVIEW=opencode`, Ralph uses `nbenchctl opencode` wrappers:
+When `PLAN_REVIEW=opencode` or `WORK_REVIEW=opencode`, Ralph uses `fluxctl opencode` wrappers:
 
 ```bash
-nbenchctl opencode impl-review ...  # Run implementation review
-nbenchctl opencode plan-review ...  # Run plan review
+fluxctl opencode impl-review ...  # Run implementation review
+fluxctl opencode plan-review ...  # Run plan review
 ```
 
 **Requirements:**
@@ -365,7 +365,7 @@ nbenchctl opencode plan-review ...  # Run plan review
 
 After `MAX_ATTEMPTS_PER_TASK` failures, Ralph:
 1. Writes `block-<task>.md` with failure context
-2. Marks task blocked via `nbenchctl block`
+2. Marks task blocked via `fluxctl block`
 3. Moves to next task
 
 ### RepoPrompt not found
@@ -395,8 +395,8 @@ Runs one loop iteration, then exits. Good for verifying setup.
 ### Deterministic smoke fixture (clean repo)
 
 ```bash
-scripts/ralph-smoke.sh --dir /tmp/nbench-opencode-smoke.X
-cd /tmp/nbench-opencode-smoke.X
+scripts/ralph-smoke.sh --dir /tmp/flux-opencode-smoke.X
+cd /tmp/flux-opencode-smoke.X
 ./scripts/ralph/ralph_once.sh --watch
 ```
 
@@ -462,7 +462,7 @@ Ralph includes plugin hooks that enforce workflow rules deterministically.
 ### Guard plugin location (OpenCode)
 
 ```
-.opencode/plugin/nbench-ralph-guard.ts
+.opencode/plugin/flux-ralph-guard.ts
 ```
 
 Disable by removing the file from `.opencode/plugin/` (OpenCode only).
@@ -483,7 +483,7 @@ cat scripts/ralph/runs/*/progress.txt | tail -5
 ls scripts/ralph/runs/*/block-*.md 2>/dev/null
 
 # Tasks still pending?
-nbenchctl ready --json
+fluxctl ready --json
 ```
 
 If run is partial: review `block-*.md` files, fix issues, re-run `ralph.sh` (resumes from pending tasks).
@@ -539,12 +539,12 @@ git merge ralph-<run-id>
 Use `git log --grep` or check task evidence:
 
 ```bash
-nbenchctl show fn-1.1 --json | jq '.evidence.commits'
+fluxctl show fn-1.1 --json | jq '.evidence.commits'
 ```
 
 ---
 
 ## References
 
-- [nbenchctl CLI reference](nbenchctl.md)
-- [N-bench README](../README.md)
+- [fluxctl CLI reference](fluxctl.md)
+- [Flux README](../README.md)

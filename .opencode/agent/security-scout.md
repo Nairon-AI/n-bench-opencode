@@ -1,5 +1,5 @@
 ---
-description: Used by /nbench:prime to scan for security configuration including GitHub settings, CODEOWNERS, and dependency updates. Do not invoke directly.
+description: Used by /flux:prime to scan for security configuration including GitHub settings, CODEOWNERS, and dependency updates. Do not invoke directly.
 mode: subagent
 tools:
   write: false

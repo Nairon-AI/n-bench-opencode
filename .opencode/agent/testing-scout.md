@@ -1,5 +1,5 @@
 ---
-description: Used by /nbench:prime to analyze test framework setup, coverage configuration, and test commands. Do not invoke directly.
+description: Used by /flux:prime to analyze test framework setup, coverage configuration, and test commands. Do not invoke directly.
 mode: subagent
 tools:
   write: false
